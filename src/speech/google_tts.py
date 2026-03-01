@@ -140,8 +140,22 @@ def synthesize_with_google_tts(
             content_type = 'audio/mpeg'
         
         logger.info(f"Google TTS synthesis: language={language}, voice={voice_config['voice_name']}, "
-                   f"text_length={len(text)}")
-        logger.info(f"First 200 chars of text: {text[:200]}")
+                   f"text_length={len(text)} chars")
+        
+        # Log full text for debugging (split into chunks if very long)
+        if len(text) <= 1000:
+            logger.info(f"Full text to synthesize: {text}")
+        else:
+            logger.info(f"Text to synthesize (first 500 chars): {text[:500]}")
+            logger.info(f"Text to synthesize (last 500 chars): ...{text[-500:]}")
+            logger.info(f"Full text length: {len(text)} characters")
+        
+        # Check Google TTS character limit (5000 characters per request)
+        if len(text) > 5000:
+            logger.warning(f"Text length ({len(text)} chars) exceeds Google TTS limit of 5000 characters!")
+            logger.warning("Text will be truncated to 5000 characters")
+            text = text[:5000]
+            synthesis_input = texttospeech_v1.SynthesisInput(text=text)
         
         # Perform the text-to-speech request
         response = client.synthesize_speech(
@@ -153,11 +167,20 @@ def synthesize_with_google_tts(
         # Get audio content
         audio_data = response.audio_content
         audio_size = len(audio_data)
+        audio_size_kb = audio_size / 1024
+        audio_size_mb = audio_size_kb / 1024
         
-        logger.info(f"Google TTS generated audio: {audio_size} bytes")
+        logger.info(f"Google TTS generated audio: {audio_size} bytes ({audio_size_kb:.2f} KB, {audio_size_mb:.2f} MB)")
+        logger.info(f"Text-to-audio ratio: {len(text)} chars -> {audio_size_kb:.2f} KB ({audio_size_kb/len(text):.2f} KB/char)")
         
+        # Validate audio size
         if audio_size < 5000:
-            logger.warning(f"Audio size is very small ({audio_size} bytes) for {len(text)} characters of text.")
+            logger.warning(f"⚠️ Audio size is very small ({audio_size} bytes) for {len(text)} characters of text!")
+            logger.warning(f"This may indicate truncation or synthesis failure")
+        
+        if audio_size > 10 * 1024 * 1024:  # 10 MB
+            logger.warning(f"⚠️ Audio size is very large ({audio_size_mb:.2f} MB)")
+            logger.warning(f"This may cause download issues on slow connections")
         
         # Upload to S3
         s3_client = boto3.client('s3', region_name=Config.AWS_REGION)

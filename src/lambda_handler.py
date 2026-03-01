@@ -170,6 +170,13 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         advice_text = invoke_bedrock(prompt)
         logger.info(f"Advice generated: {len(advice_text)} characters")
         
+        # Log first 500 and last 500 characters for debugging
+        if len(advice_text) > 1000:
+            logger.info(f"Advice text (first 500 chars): {advice_text[:500]}")
+            logger.info(f"Advice text (last 500 chars): {advice_text[-500:]}")
+        else:
+            logger.info(f"Advice text (full): {advice_text}")
+        
         # Step 7: Chain-of-Verification (Requirement 4.6, 11.5)
         validation_result = validate_safety(advice_text, context_data.weather)
         
@@ -182,6 +189,13 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         # Strip markdown formatting before TTS (removes **, __, *, etc.)
         tts_text = strip_markdown_formatting(advice_text)
         logger.info(f"Stripped markdown formatting for TTS: {len(advice_text)} -> {len(tts_text)} chars")
+        
+        # Log first 500 and last 500 characters after stripping for debugging
+        if len(tts_text) > 1000:
+            logger.info(f"TTS text after stripping (first 500 chars): {tts_text[:500]}")
+            logger.info(f"TTS text after stripping (last 500 chars): {tts_text[-500:]}")
+        else:
+            logger.info(f"TTS text after stripping (full): {tts_text}")
         
         audio_key, synthesis_service = synthesize_speech(
             tts_text,
