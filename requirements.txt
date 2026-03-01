@@ -1,0 +1,27 @@
+# AWS SDK and Services
+boto3>=1.34.0
+botocore>=1.34.0
+
+# HTTP Requests
+requests>=2.31.0
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# Data Validation
+pydantic>=2.5.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+moto>=4.2.0
+hypothesis>=6.92.0
+
+# Utilities
+python-dateutil>=2.8.2
+
+# Google Cloud Speech-to-Text (use latest version for protobuf 5.x compatibility)
+google-cloud-speech>=2.27.0
+
+# Google Cloud Text-to-Speech
+google-cloud-texttospeech>=2.16.0

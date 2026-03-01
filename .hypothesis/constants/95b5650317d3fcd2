@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\speech\__init__.py
+# hypothesis_version: 6.151.6
+
+['LowConfidenceError', 'PollySynthesisError', 'SpeechRoutingError', 'TranscriptionError', 'detect_language', 'get_service_info', 'is_polly_supported', 'synthesize_speech', 'transcribe_audio']

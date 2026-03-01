@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\utils\bandwidth.py
+# hypothesis_version: 6.151.6
+
+[50000, 100000, 'ContentLength', 'bandwidth', 'low', 'normal', 's3']

@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\speech\polly.py
+# hypothesis_version: 6.151.6
+
+[2900, '([.!?।]\\s+)', 'Aditi', 'AudioStream', 'ContentType', 'Invalid SSML in text', 'Kajal', 'Metadata', 'audio/mpeg', 'engine', 'hi-IN', 'kn-IN', 'language', 'language_code', 'low_bandwidth', 'ml-IN', 'mp3', 'neural', 'not supported', 'polly', 's3', 'standard', 'ta-IN', 'te-IN', 'text', 'too long', 'voice_id']

@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\speech\google_tts.py
+# hypothesis_version: 6.151.6
+
+[5000, 16000, 24000, 'audio/mpeg', 'audio/wav', 'audio_size', 'authentication', 'bn-IN', 'bn-IN-Wavenet-A', 'credentials', 'google_tts', 'gu-IN', 'gu-IN-Wavenet-A', 'hi-IN', 'hi-IN-Wavenet-D', 'invalid', 'kn-IN', 'kn-IN-Standard-A', 'language', 'language_code', 'low_bandwidth', 'ml-IN', 'ml-IN-Wavenet-A', 'mp3', 'mr-IN', 'mr-IN-Wavenet-A', 'not supported', 'pa-IN', 'pa-IN-Wavenet-A', 'quota', 's3', 'service', 'ssml_gender', 'ta-IN', 'ta-IN-Wavenet-A', 'te-IN', 'te-IN-Standard-A', 'text_length', 'voice_name', 'wav']

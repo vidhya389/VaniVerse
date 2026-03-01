@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\models\safety_validation.py
+# hypothesis_version: 6.151.6
+
+['blocking', 'conflicts', 'example', 'isApproved', 'message', 'rain_forecast', 'severity', 'type']

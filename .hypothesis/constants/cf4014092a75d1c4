@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\speech\transcribe.py
+# hypothesis_version: 6.151.6
+
+[0.0, 0.7, 'Bengali', 'COMPLETED', 'FAILED', 'FailureReason', 'Gujarati', 'Hindi', 'Kannada', 'LanguageCode', 'Marathi', 'MaxSpeakerLabels', 'MediaFileUri', 'No language detected', 'Punjabi', 'ShowSpeakerLabels', 'Tamil', 'Telugu', 'Transcript', 'TranscriptFileUri', 'TranscriptionJob', 'Unknown error', 'alternatives', 'bn-IN', 'confidence', 'gu-IN', 'hi-IN', 'items', 'kn-IN', 'mr-IN', 'pa-IN', 'results', 'ta-IN', 'te-IN', 'transcribe', 'transcript', 'transcripts', 'wav']

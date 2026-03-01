@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\context\ufsi.py
+# hypothesis_version: 6.151.6
+
+[1.0, 300, 3600, 'Authorization', 'Content-Type', 'X-Consent-Token', 'X-Request-ID', 'access_token', 'application/json', 'client_credentials', 'client_id', 'client_secret', 'crop', 'cropHistory', 'currentCrop', 'expires_in', 'grant_type', 'landArea', 'scope', 'season', 'soilType', 'year']
