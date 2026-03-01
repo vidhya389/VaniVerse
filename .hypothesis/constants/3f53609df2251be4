@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\safety\validator.py
+# hypothesis_version: 6.151.6
+
+['application', 'apply', 'blocking', 'chemical', 'extreme_cold', 'extreme_heat', 'fungicide', 'high_evaporation', 'high_wind', 'insecticide', 'irrigate', 'irrigation', 'pesticide', 'rain_forecast', 'spray', 'warning', 'water']

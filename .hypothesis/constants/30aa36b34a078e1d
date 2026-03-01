@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\models\context_data.py
+# hypothesis_version: 6.151.6
+
+[0.0, 2.5, 12.5, 15.0, 30.0, 32.5, 35.0, 65.0, 100, 2000, 2023, 2100, '6-hour forecast', 'Affected crop', 'Clay Loam', 'Conversation memory', 'Crop name', "Farmer's question", 'Humidity percentage', 'Kharif', 'Precipitation in mm', 'Rabi', 'Ramesh', 'Rice', "System's advice", 'Tomato', 'Unknown', 'Weather data', 'Wheat', 'Wind speed in km/h', 'Year of cultivation', 'advice', 'commonConcerns', 'consolidatedInsights', 'crop', 'cropHistory', 'current', 'currentCrop', 'daysSinceReport', 'example', 'expectedRainfall', 'farmerName', 'forecast6h', 'humidity', 'irrigation timing', 'issue', 'landArea', 'landRecords', 'memory', 'pest management', 'precipitation', 'primaryCrop', 'question', 'recentInteractions', 'reportedDate', 'season', 'soilType', 'temperature', 'timestamp', 'unresolvedIssues', 'weather', 'windSpeed', 'year']

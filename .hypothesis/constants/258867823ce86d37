@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\agents\weather_analytics.py
+# hypothesis_version: 6.151.6
+
+[0.7, 0.9, 500, 'HIGH', 'LOW', 'MEDIUM', 'anthropic_version', 'bedrock-2023-05-31', 'bedrock-runtime', 'body', 'content', 'inferenceConfig', 'max_new_tokens', 'max_tokens', 'message', 'messages', 'nova', 'output', 'role', 'system', 'temperature', 'text', 'top_p', 'user']

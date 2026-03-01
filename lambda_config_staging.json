@@ -1,0 +1,39 @@
+{
+  "FunctionName": "vaniverse-orchestrator-staging",
+  "Runtime": "python3.11",
+  "Role": "arn:aws:iam::ACCOUNT_ID:role/vaniverse-lambda-role-staging",
+  "Handler": "src.lambda_handler.lambda_handler",
+  "Description": "VaniVerse Orchestrator - Staging Environment",
+  "Timeout": 300,
+  "MemorySize": 1024,
+  "Environment": {
+    "Variables": {
+      "ENVIRONMENT": "staging",
+      "AWS_REGION": "ap-south-1",
+      "AUDIO_INPUT_BUCKET": "vaniverse-audio-input-staging",
+      "AUDIO_OUTPUT_BUCKET": "vaniverse-audio-output-staging",
+      "USE_MOCK_UFSI": "true",
+      "LOG_LEVEL": "DEBUG",
+      "OPENWEATHER_API_KEY": "REPLACE_WITH_ACTUAL_KEY",
+      "BHASHINI_API_KEY": "REPLACE_WITH_ACTUAL_KEY",
+      "BHASHINI_TTS_ENDPOINT": "https://api.bhashini.gov.in/tts",
+      "UFSI_ENDPOINT": "https://ufsi-staging.agristack.gov.in",
+      "AGENTCORE_MEMORY_ID": "REPLACE_WITH_MEMORY_ID",
+      "AGENTCORE_AGENT_ID": "REPLACE_WITH_AGENT_ID",
+      "AGENTCORE_ALIAS_ID": "REPLACE_WITH_ALIAS_ID",
+      "CLAUDE_MODEL_ARN": "arn:aws:bedrock:ap-south-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0"
+    }
+  },
+  "Tags": {
+    "Environment": "staging",
+    "Project": "VaniVerse",
+    "ManagedBy": "deployment-script"
+  },
+  "TracingConfig": {
+    "Mode": "Active"
+  },
+  "Layers": [],
+  "VpcConfig": {},
+  "DeadLetterConfig": {},
+  "ReservedConcurrentExecutions": 10
+}

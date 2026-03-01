@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\utils\retry.py
+# hypothesis_version: 6.151.6
+
+[1.0, 2.0, 10.0, 400, 401, 403, 404, 429, 500, 502, 503, 504, 'API call', 'T', 'status_code']

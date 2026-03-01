@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\prompting\builder.py
+# hypothesis_version: 6.151.6
+
+[0.7, 0.9, 1000, 'Code', 'Error', 'Memory:\n', 'Message', 'ThrottlingException', 'Unknown', 'ValidationException', 'adaptive', 'anthropic', 'anthropic_version', 'application/json', 'bedrock-2023-05-31', 'bedrock-runtime', 'body', 'claude', 'content', 'disease', 'fertilizer', 'hi-IN', 'icar_knowledge', 'inferenceConfig', 'kn-IN', 'max_attempts', 'max_new_tokens', 'max_tokens', 'message', 'messages', 'mode', 'nova', 'output', 'pest', 'rain', 'role', 'system', 'ta-IN', 'te-IN', 'temperature', 'text', 'top_p', 'user', 'weather', 'weather_analysis', 'उर्वरक', 'कीट', 'खाद', 'खेत', 'फसल', 'बारिश', 'मौसम', 'रोग', 'பயிர்', 'வயல்', 'வானிலை', 'పంట', 'పొలం', 'వాతావరణం', 'ಬೆಳೆ', 'ಹವಾಮಾನ', 'ಹೊಲ']

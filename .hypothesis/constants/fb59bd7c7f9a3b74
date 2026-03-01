@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\prompting\builder.py
+# hypothesis_version: 6.151.6
+
+[1000, 'Code', 'Error', 'Memory:\n', 'Message', 'ThrottlingException', 'Unknown', 'ValidationException', 'adaptive', 'anthropic_version', 'application/json', 'bedrock-2023-05-31', 'bedrock-runtime', 'body', 'content', 'icar_knowledge', 'max_attempts', 'max_tokens', 'messages', 'mode', 'role', 'system', 'text', 'user', 'weather_analysis']

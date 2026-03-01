@@ -1,0 +1,50 @@
+name: vaniverse_client
+description: VaniVerse Flutter client - Voice-first AI assistant for Indian farmers
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # AWS SDK
+  amplify_flutter: ^2.0.0
+  amplify_storage_s3: ^2.0.0
+  
+  # Audio recording and playback
+  audio_waveforms: ^1.0.5
+  audioplayers: ^6.0.0
+  
+  # Location services
+  geolocator: ^10.0.0
+  permission_handler: ^11.0.0
+  
+  # State management
+  provider: ^6.0.0
+  
+  # HTTP client
+  http: ^1.0.0
+  
+  # Local storage
+  shared_preferences: ^2.0.0
+  path_provider: ^2.0.0
+  
+  # UUID generation
+  uuid: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  mockito: ^5.0.0
+  build_runner: ^2.4.0
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/audio/

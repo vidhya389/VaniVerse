@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\lambda_handler.py
+# hypothesis_version: 6.151.6
+
+[28.6139, 77.209, 200, 500, '.', '/', 'Metadata', 'Records', 'TEST_SESSION', 'TEST_USER', '_', 'agristack_id', 'agristackid', 'audioKey', 'audio_key', 'aws:s3', 'bandwidthMode', 'body', 'bucket', 'conflicts', 'error', 'errorMessage', 'error_type', 'eventSource', 'executionTime', 'farmer_id', 'gps', 'hi-IN', 'icar_knowledge', 'isApproved', 'isError', 'key', 'language', 'latitude', 'longitude', 'low', 'message', 'metadata', 'name', 'object', 'request_id', 's3', 'session_id', 'severity', 'statusCode', 'synthesisService', 'synthesis_failed', 'type', 'ussdFallback', 'validationResult', 'weather_analysis']

@@ -1,0 +1,117 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["AWS/Lambda", "Invocations", {"stat": "Sum", "label": "Total Invocations"}],
+          [".", "Errors", {"stat": "Sum", "label": "Errors"}],
+          [".", "Throttles", {"stat": "Sum", "label": "Throttles"}]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "ap-south-1",
+        "title": "Lambda Invocations & Errors",
+        "period": 300,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["AWS/Lambda", "Duration", {"stat": "Average", "label": "Avg Duration"}],
+          ["...", {"stat": "Maximum", "label": "Max Duration"}],
+          ["...", {"stat": "p99", "label": "P99 Duration"}]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "ap-south-1",
+        "title": "Lambda Duration (ms)",
+        "period": 300,
+        "yAxis": {
+          "left": {
+            "min": 0,
+            "max": 6000
+          }
+        },
+        "annotations": {
+          "horizontal": [
+            {
+              "label": "6s Target",
+              "value": 6000,
+              "fill": "above",
+              "color": "#ff0000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["AWS/Lambda", "ConcurrentExecutions", {"stat": "Maximum", "label": "Concurrent Executions"}]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "ap-south-1",
+        "title": "Concurrent Executions",
+        "period": 300
+      }
+    },
+    {
+      "type": "log",
+      "properties": {
+        "query": "SOURCE '/aws/lambda/vaniverse-orchestrator-staging'\n| fields @timestamp, @message\n| filter @message like /ERROR/\n| sort @timestamp desc\n| limit 20",
+        "region": "ap-south-1",
+        "title": "Recent Errors",
+        "stacked": false
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["AWS/S3", "NumberOfObjects", {"stat": "Average", "label": "Audio Files"}]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "ap-south-1",
+        "title": "S3 Audio Storage",
+        "period": 3600
+      }
+    },
+    {
+      "type": "log",
+      "properties": {
+        "query": "SOURCE '/aws/lambda/vaniverse-orchestrator-staging'\n| fields @timestamp, @message\n| filter @message like /voice_loop_latency/\n| parse @message /voice_loop_latency: (?<latency>\\d+\\.\\d+)/\n| stats avg(latency) as avg_latency, max(latency) as max_latency, pct(latency, 99) as p99_latency by bin(5m)",
+        "region": "ap-south-1",
+        "title": "Voice Loop Latency Analysis",
+        "stacked": false
+      }
+    },
+    {
+      "type": "log",
+      "properties": {
+        "query": "SOURCE '/aws/lambda/vaniverse-orchestrator-staging'\n| fields @timestamp, @message\n| filter @message like /language/\n| parse @message /language: (?<lang>\\w+-\\w+)/\n| stats count() by lang",
+        "region": "ap-south-1",
+        "title": "Language Distribution",
+        "stacked": false
+      }
+    },
+    {
+      "type": "log",
+      "properties": {
+        "query": "SOURCE '/aws/lambda/vaniverse-orchestrator-staging'\n| fields @timestamp, @message\n| filter @message like /safety_validation/\n| parse @message /safety_validation: (?<result>\\w+)/\n| stats count() by result",
+        "region": "ap-south-1",
+        "title": "Safety Validation Results",
+        "stacked": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\models\farmer_session.py
+# hypothesis_version: 6.151.6
+
+[28.6139, 77.209, -180, 180, 'AGRI001', 'FARMER-12345', 'GPS location', 'ISO 8601 timestamp', 'SESSION-67890', '^[a-z]{2}-[A-Z]{2}$', 'agriStackId', 'bn-IN', 'example', 'farmerId', 'gpsCoordinates', 'gu-IN', 'hi-IN', 'kn-IN', 'language', 'latitude', 'longitude', 'mr-IN', 'pa-IN', 'sessionId', 'ta-IN', 'te-IN', 'timestamp']

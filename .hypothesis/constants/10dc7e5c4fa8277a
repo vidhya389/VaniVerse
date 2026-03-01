@@ -1,0 +1,4 @@
+# file: C:\Users\vidhy\VaniVerse\src\speech\bhashini.py
+# hypothesis_version: 6.151.6
+
+[1.0, 200, 401, 403, 16000, 22050, 'Authorization', 'Body', 'Content-Type', 'Unknown error', 'application/json', 'audio', 'audio.wav', 'audio/mpeg', 'audio/wav', 'bhashini', 'bhashini_lang', 'bn', 'bn-IN', 'empty', 'error', 'female', 'gender', 'gu', 'gu-IN', 'hi', 'hi-IN', 'high', 'kn', 'kn-IN', 'language', 'low', 'low_bandwidth', 'mr', 'mr-IN', 'not supported', 'pa', 'pa-IN', 'quality', 's3', 'sample_rate', 'service', 'speed', 'ta', 'ta-IN', 'te', 'te-IN', 'text', 'transcript']

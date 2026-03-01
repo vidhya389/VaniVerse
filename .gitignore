@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Environment Variables
+.env
+
+# AWS Credentials (NEVER commit these!)
+client/lib/aws_credentials.dart
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# AWS
+.aws-sam/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Documentation and Scripts (generated/temporary)
+*.md
+*.ps1
+
+# Audio Files
+*.wav
+*.webm
+
+# Archives
+*.zip
+
+# Lambda Package (build artifact)
+lambda_package/
