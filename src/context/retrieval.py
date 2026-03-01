@@ -54,7 +54,7 @@ def fetch_context_parallel(
         # Land records fetch (use mock or real UFSI based on config)
         if agristack_id:
             if Config.USE_MOCK_UFSI:
-                land_future = executor.submit(fetch_mock_land_records, agristack_id)
+                land_future = executor.submit(fetch_mock_land_records, farmer_id, agristack_id)
             else:
                 land_future = executor.submit(fetch_land_records, farmer_id, agristack_id)
         else:
