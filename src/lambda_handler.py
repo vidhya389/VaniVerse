@@ -10,6 +10,7 @@ Implements Requirements 11.1, 11.2, 11.4, 11.5, 11.6, 11.7
 import json
 import logging
 import time
+import os
 import boto3
 import re
 from typing import Dict, Any, Optional
@@ -30,6 +31,65 @@ from src.config import Config
 # Configure logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+
+def _store_interaction_async(
+    farmer_id: str,
+    question: str,
+    advice: str,
+    context: Any
+) -> None:
+    """
+    Store interaction in AgentCore Memory asynchronously using Lambda invoke.
+    
+    This function invokes the current Lambda function asynchronously with a special
+    event type to handle memory storage without blocking the main response.
+    
+    Args:
+        farmer_id: Unique farmer identifier
+        question: Farmer's question
+        advice: System's advice
+        context: Full context data
+        
+    Raises:
+        Exception: If async invocation fails
+    """
+    try:
+        lambda_client = boto3.client('lambda', region_name=Config.AWS_REGION)
+        
+        # Prepare payload for async memory storage
+        payload = {
+            'eventType': 'STORE_MEMORY',
+            'farmer_id': farmer_id,
+            'question': question,
+            'advice': advice,
+            'context': {
+                'weather': {
+                    'temperature': context.weather.current.temperature if context.weather else None,
+                    'condition': context.weather.current.condition if context.weather else None,
+                },
+                'landRecords': context.landRecords is not None,
+                'memory': {
+                    'recentInteractions': len(context.memory.recentInteractions) if context.memory else 0
+                }
+            }
+        }
+        
+        # Get Lambda function name from environment or config
+        function_name = os.getenv('AWS_LAMBDA_FUNCTION_NAME', Config.LAMBDA_FUNCTION_NAME)
+        
+        # Invoke Lambda asynchronously (Event invocation type)
+        lambda_client.invoke(
+            FunctionName=function_name,
+            InvocationType='Event',  # Async invocation
+            Payload=json.dumps(payload)
+        )
+        
+        logger.info(f"Async memory storage invoked for farmer {farmer_id}")
+        
+    except Exception as e:
+        logger.error(f"Failed to invoke async memory storage: {e}")
+        raise
 
 
 def strip_markdown_formatting(text: str) -> str:
@@ -84,7 +144,11 @@ def strip_markdown_formatting(text: str) -> str:
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
-    Main Lambda handler triggered by S3 upload events.
+    Main Lambda handler triggered by S3 upload events or async memory storage.
+    
+    Handles two event types:
+    1. S3 upload events: Complete Guru Cycle with audio response
+    2. STORE_MEMORY events: Async memory storage (no response needed)
     
     Coordinates the complete Guru Cycle:
     1. Parse S3 event and detect bandwidth mode
@@ -94,11 +158,12 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     5. Build Memory-First prompt and invoke Claude
     6. Execute Chain-of-Verification safety validation
     7. Synthesize speech response
-    8. Store interaction in AgentCore Memory
-    9. Handle USSD fallback for low-bandwidth timeouts
+    8. Return audio immediately (improved response time)
+    9. Store interaction in AgentCore Memory asynchronously
+    10. Handle USSD fallback for low-bandwidth timeouts
     
     Args:
-        event: S3 event containing audio upload information
+        event: S3 event or STORE_MEMORY event
         context: Lambda context object
         
     Returns:
@@ -109,6 +174,10 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
     start_time = time.time()
     logger.info(f"Received event: {json.dumps(event)}")
+    
+    # Check if this is an async memory storage event
+    if event.get('eventType') == 'STORE_MEMORY':
+        return _handle_async_memory_storage(event)
     
     try:
         # Parse S3 event to extract audio metadata
@@ -205,18 +274,34 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         )
         logger.info(f"Speech synthesized: service={synthesis_service}, key={audio_key}")
         
-        # Step 9: Store interaction in AgentCore Memory (Requirement 11.7)
-        store_interaction(
-            farmer_id=audio_request['farmer_id'],
-            question=transcribed_text,
-            advice=advice_text,
-            context=context_data
-        )
-        logger.info("Interaction stored in AgentCore Memory")
-        
-        # Calculate execution time
+        # Calculate execution time BEFORE memory storage for accurate response time
         execution_time = time.time() - start_time
-        logger.info(f"Voice loop completed in {execution_time:.2f} seconds")
+        logger.info(f"Voice loop completed (before memory storage) in {execution_time:.2f} seconds")
+        
+        # Step 9: Store interaction in AgentCore Memory asynchronously (Requirement 11.7)
+        # This is done AFTER calculating response time to improve perceived latency
+        try:
+            _store_interaction_async(
+                farmer_id=audio_request['farmer_id'],
+                question=transcribed_text,
+                advice=advice_text,
+                context=context_data
+            )
+            logger.info("Interaction storage initiated asynchronously")
+        except Exception as e:
+            # Don't fail the response if async storage fails
+            logger.error(f"Failed to initiate async memory storage: {e}")
+            # Fall back to synchronous storage
+            try:
+                store_interaction(
+                    farmer_id=audio_request['farmer_id'],
+                    question=transcribed_text,
+                    advice=advice_text,
+                    context=context_data
+                )
+                logger.info("Interaction stored synchronously (fallback)")
+            except Exception as sync_error:
+                logger.error(f"Synchronous memory storage also failed: {sync_error}")
         
         # Step 10: Check for USSD fallback if timeout exceeded (Requirement 14.4, 14.5)
         response = {
@@ -254,6 +339,70 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'error': str(e),
                 'error_type': type(e).__name__
             })
+        }
+
+
+def _handle_async_memory_storage(event: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Handle async memory storage event.
+    
+    This function is called when the Lambda is invoked asynchronously
+    to store interaction in AgentCore Memory without blocking the main response.
+    
+    Args:
+        event: STORE_MEMORY event with farmer_id, question, advice, context
+        
+    Returns:
+        Success response
+    """
+    try:
+        logger.info(f"Handling async memory storage for farmer {event['farmer_id']}")
+        
+        # Reconstruct minimal context for storage
+        # Note: We don't need full context, just enough for memory formatting
+        from src.models.context_data import ContextData, WeatherData, CurrentWeather, MemoryContext
+        
+        context_dict = event.get('context', {})
+        weather_dict = context_dict.get('weather', {})
+        
+        # Create minimal context object
+        context = ContextData(
+            weather=WeatherData(
+                current=CurrentWeather(
+                    temperature=weather_dict.get('temperature', 0),
+                    condition=weather_dict.get('condition', 'Unknown'),
+                    humidity=0,
+                    windSpeed=0,
+                    precipitation=0
+                ),
+                forecast=[],
+                alerts=[]
+            ) if weather_dict.get('temperature') else None,
+            landRecords=None,  # Not needed for memory storage
+            memory=MemoryContext()  # Empty memory context
+        )
+        
+        # Store interaction synchronously (this Lambda invocation is already async)
+        store_interaction(
+            farmer_id=event['farmer_id'],
+            question=event['question'],
+            advice=event['advice'],
+            context=context
+        )
+        
+        logger.info(f"Async memory storage completed for farmer {event['farmer_id']}")
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'Memory stored successfully'})
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in async memory storage: {e}", exc_info=True)
+        # Don't fail - memory storage is not critical
+        return {
+            'statusCode': 200,  # Return 200 to avoid retries
+            'body': json.dumps({'message': 'Memory storage failed', 'error': str(e)})
         }
 
 
