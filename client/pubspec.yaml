@@ -25,10 +25,10 @@ dependencies:
   provider: ^6.0.0
   
   # HTTP client
-  http: ^1.0.0
+  http: ^1.1.0
   
   # Local storage
-  shared_preferences: ^2.0.0
+  shared_preferences: ^2.2.0
   path_provider: ^2.0.0
   
   # UUID generation
