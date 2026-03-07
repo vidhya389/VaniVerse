@@ -3,6 +3,7 @@ Farmer Registration Lambda Handler
 
 Handles farmer registration with phone number and generates unique farmer IDs.
 Stores farmer data in DynamoDB.
+Validates OTP verification token before registration.
 """
 
 import json
@@ -17,11 +18,13 @@ from botocore.exceptions import ClientError
 
 # Configuration
 DYNAMODB_TABLE = os.getenv('DYNAMODB_TABLE_NAME', 'vaniverse-farmers')
+OTP_TABLE = os.getenv('OTP_TABLE_NAME', 'OTPVerification')
 AWS_REGION = os.getenv('DYNAMODB_REGION', os.getenv('AWS_REGION', 'ap-south-1'))
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
 table = dynamodb.Table(DYNAMODB_TABLE)
+otp_table = dynamodb.Table(OTP_TABLE)
 
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -29,7 +32,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     Main Lambda handler for farmer registration.
     
     Args:
-        event: API Gateway event with phone_number in body
+        event: API Gateway event with phone_number and verification_token in body
         context: Lambda context
     
     Returns:
@@ -43,6 +46,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             body = event.get('body', event)
         
         phone_number = body.get('phone_number', '').strip()
+        verification_token = body.get('verification_token', '').strip()
         name = body.get('name', '').strip()
         language = body.get('language', 'hi-IN')
         agristack_id = body.get('agristack_id', '').strip()
@@ -54,16 +58,23 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if not validate_phone_number(phone_number):
             return error_response(400, "Invalid phone number format. Use +91XXXXXXXXXX")
         
+        # Validate verification token
+        if not verification_token:
+            return error_response(400, "Verification token is required")
+        
+        if not validate_verification_token(phone_number, verification_token):
+            return error_response(403, "Invalid or expired verification token. Please verify OTP again.")
+        
         # Check if phone number already exists
         existing_farmer = get_farmer_by_phone(phone_number)
         
         if existing_farmer:
-            # Return existing farmer ID
+            # Return existing farmer ID (login case)
             print(f"Phone number {phone_number} already registered with ID {existing_farmer['farmer_id']}")
             return success_response({
                 'farmer_id': existing_farmer['farmer_id'],
                 'existing': True,
-                'message': 'Phone number already registered',
+                'message': 'Login successful',
                 'farmer': existing_farmer
             })
         
@@ -119,6 +130,48 @@ def validate_phone_number(phone: str) -> bool:
     # Indian phone number: +91 followed by 10 digits
     pattern = r'^\+91[6-9]\d{9}$'
     return bool(re.match(pattern, phone))
+
+
+def validate_verification_token(phone_number: str, verification_token: str) -> bool:
+    """
+    Validate that OTP was verified for this phone number.
+    
+    Args:
+        phone_number: Phone number in format +919876543210
+        verification_token: Token from verify_otp
+    
+    Returns:
+        True if token is valid, False otherwise
+    """
+    try:
+        import time
+        
+        response = otp_table.get_item(
+            Key={'phone_number': phone_number}
+        )
+        
+        if 'Item' not in response:
+            print(f"No OTP record found for {phone_number}")
+            return False
+        
+        otp_item = response['Item']
+        
+        # Check if verified
+        if not otp_item.get('verified', False):
+            print(f"OTP not verified for {phone_number}")
+            return False
+        
+        # Check if not expired (allow 5 minutes after verification)
+        if int(time.time()) > otp_item['expiry_time'] + 300:
+            print(f"Verification token expired for {phone_number}")
+            return False
+        
+        print(f"Verification token valid for {phone_number}")
+        return True
+        
+    except ClientError as e:
+        print(f"Error validating token: {e}")
+        return False
 
 
 def generate_farmer_id() -> str:
