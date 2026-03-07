@@ -197,10 +197,6 @@ vaniverse/
 │   ├── deploy_lambda_windows.ps1 # Lambda deployment
 │   ├── performance_benchmark.py  # Performance testing
 │   └── test_bedrock_memory.py    # Memory testing
-├── docs/                         # Documentation
-│   ├── BEDROCK_AGENT_MEMORY_SETUP.md
-│   ├── GOOGLE_SPEECH_SETUP.md
-│   └── S3_TRIGGER_SETUP.md
 ├── requirements.txt              # Python dependencies
 ├── .env.example                  # Environment template
 └── README.md                     # This file
@@ -307,18 +303,6 @@ mypy src/
 5. Update documentation
 6. Submit pull request
 
-## 📖 Documentation
-
-- [Performance Report](PERFORMANCE_REPORT.md) - Detailed performance metrics and benchmarks
-- [Performance Summary](PERFORMANCE_SUMMARY.md) - Quick performance reference
-- [Performance Architecture](PERFORMANCE_ARCHITECTURE.md) - Visual architecture diagrams
-- [Deployment Guide](DEPLOYMENT.md) - Production deployment instructions
-- [Project Structure](PROJECT_STRUCTURE.md) - Detailed code organization
-- [Client Setup](client/README.md) - Flutter app setup guide
-- [Bedrock Agent Memory Setup](docs/BEDROCK_AGENT_MEMORY_SETUP.md) - Memory configuration
-- [Google Speech Setup](docs/GOOGLE_SPEECH_SETUP.md) - Speech API configuration
-- [S3 Trigger Setup](docs/S3_TRIGGER_SETUP.md) - S3 event configuration
-
 ## 🔐 Security
 
 - **Data Encryption**: All data encrypted at rest (S3, Bedrock Agent) and in transit (TLS 1.3)
@@ -348,8 +332,6 @@ python scripts/configure_s3_trigger.py --environment production
 python scripts/validate_setup.py --environment production
 ```
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
-
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -373,8 +355,6 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
 - Run performance benchmark: `python scripts/performance_benchmark.py`
 - Check CloudWatch metrics
 - Review parallel execution logs
-
-See [PERFORMANCE_REPORT.md](PERFORMANCE_REPORT.md) for detailed troubleshooting guide.
 
 ## 🤝 Contributing
 
